@@ -70,4 +70,23 @@ public class JobApplicationController {
     public void deleteJob(@PathVariable Long id) {
         jobApplicationRepository.deleteById(id);
     }
+    @PutMapping("/{id}")
+    public JobApplication updateJob(@PathVariable Long id,
+                                    @RequestBody JobApplication updatedJob) {
+
+        JobApplication existingJob =
+                jobApplicationRepository.findById(id).orElse(null);
+
+        if (existingJob == null) {
+            return null;
+        }
+
+        existingJob.setCompanyName(updatedJob.getCompanyName());
+        existingJob.setJobRole(updatedJob.getJobRole());
+        existingJob.setStatus(updatedJob.getStatus());
+        existingJob.setAppliedDate(updatedJob.getAppliedDate());
+        existingJob.setNotes(updatedJob.getNotes());
+
+        return jobApplicationRepository.save(existingJob);
+    }
 }
