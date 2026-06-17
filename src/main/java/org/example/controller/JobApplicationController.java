@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.example.service.JobApplicationService;
 import org.springframework.data.domain.Sort;
 
+import org.example.dto.JobApplicationDTO;
+
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -132,5 +134,18 @@ public class JobApplicationController {
 
         return jobApplicationRepository.findAll(
                 Sort.by("status"));
+    }
+
+
+    @GetMapping("/dto")
+    public List<JobApplicationDTO> getAllJobsDTO() {
+        return jobApplicationService.getAllJobsDTO();
+    }
+
+    @GetMapping("/dto/{id}")
+    public JobApplicationDTO getJobDTOById(
+            @PathVariable Long id) {
+
+        return jobApplicationService.getJobDTOById(id);
     }
 }
