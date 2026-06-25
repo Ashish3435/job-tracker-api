@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.example.service.JobApplicationService;
 import org.springframework.data.domain.Sort;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.example.dto.JobApplicationDTO;
 
 import java.util.List;
@@ -91,11 +92,19 @@ public class JobApplicationController {
 
         return jobApplicationRepository.findByStatus(status);
     }
+
+    @GetMapping("/my-jobs")
+    public List<JobApplication> getMyJobs() {
+        return jobApplicationService.getMyJobs();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteJob(@PathVariable Long id) {
         jobApplicationService.deleteJob(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public JobApplication updateJob(@PathVariable Long id,
                                     @RequestBody JobApplication updatedJob) {
@@ -147,5 +156,9 @@ public class JobApplicationController {
             @PathVariable Long id) {
 
         return jobApplicationService.getJobDTOById(id);
+    }
+    @GetMapping("/my-dashboard")
+    public Map<String, Long> getMyDashboard() {
+        return jobApplicationService.getMyDashboardStats();
     }
 }

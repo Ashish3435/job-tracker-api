@@ -4,9 +4,16 @@ import org.example.entity.JobApplication;
 import org.example.repository.JobApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.example.entity.User;
+import org.example.repository.UserRepository;
+import java.util.Map;
+import java.util.HashMap;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.example.dto.JobApplicationDTO;
 import java.util.stream.Collectors;
+
 
 import java.util.List;
 
@@ -14,10 +21,25 @@ import java.util.List;
 public class JobApplicationService {
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private JobApplicationRepository jobApplicationRepository;
 
     public List<JobApplication> getAllJobs() {
-        return jobApplicationRepository.findAll();
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email);
+
+        if ("ADMIN".equals(user.getRole())) {
+            return jobApplicationRepository.findAll();
+        }
+
+        return jobApplicationRepository.findByUser(user);
     }
 
     public JobApplication getJobById(Long id) {
@@ -25,9 +47,18 @@ public class JobApplicationService {
     }
 
     public JobApplication createJob(JobApplication job) {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email);
+
+        job.setUser(user);
+
         return jobApplicationRepository.save(job);
     }
-
     public void deleteJob(Long id) {
         jobApplicationRepository.deleteById(id);
     }
@@ -58,5 +89,41 @@ public class JobApplicationService {
                 job.getJobRole(),
                 job.getStatus()
         );
+    }
+    public List<JobApplication> getMyJobs() {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email);
+
+        return jobApplicationRepository.findByUser(user);
+    }
+    public Map<String, Long> getMyDashboardStats() {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email);
+
+        Map<String, Long> stats = new HashMap<>();
+
+        stats.put("Applied",
+                jobApplicationRepository.countByUserAndStatus(user, "Applied"));
+
+        stats.put("Interview",
+                jobApplicationRepository.countByUserAndStatus(user, "Interview"));
+
+        stats.put("Offer",
+                jobApplicationRepository.countByUserAndStatus(user, "Offer"));
+
+        stats.put("Rejected",
+                jobApplicationRepository.countByUserAndStatus(user, "Rejected"));
+
+        return stats;
     }
 }
