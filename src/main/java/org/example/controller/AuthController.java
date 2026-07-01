@@ -56,6 +56,7 @@ public class AuthController {
     public LoginResponse login(@RequestBody LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail());
+           System.out.println("LOGIN API HIT");
 
         if (user == null) {
             throw new RuntimeException("Invalid email");

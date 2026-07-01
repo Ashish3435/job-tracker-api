@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import org.example.service.JobApplicationService;
 import org.springframework.data.domain.Sort;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.example.dto.JobApplicationDTO;
 
@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 
 @RestController
 @RequestMapping("/api/jobs")
+@SecurityRequirement(name = "bearerAuth")
 public class JobApplicationController {
 
     @Autowired
