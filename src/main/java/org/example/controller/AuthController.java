@@ -12,7 +12,9 @@ import org.example.dto.MeResponse;
 import org.springframework.security.core.Authentication;
 
 import org.example.dto.LoginResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -50,6 +52,32 @@ public class AuthController {
         userRepository.save(user);
 
         return "User registered successfully";
+    }
+
+    @PostMapping("/create-admin")
+    public String createAdmin(@RequestBody RegisterRequest request) {
+        System.out.println("CREATE ADMIN API HIT");
+
+        User existingUser =
+                userRepository.findByEmail(request.getEmail());
+
+        if (existingUser != null) {
+            return "Email already registered";
+        }
+
+        User user = new User();
+
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(
+                passwordEncoder.encode(request.getPassword())
+        );
+
+        user.setRole("ADMIN");
+
+        userRepository.save(user);
+
+        return "Admin created successfully";
     }
 
     @PostMapping("/login")

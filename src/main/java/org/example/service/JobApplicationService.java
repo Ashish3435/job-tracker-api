@@ -8,12 +8,13 @@ import org.example.entity.User;
 import org.example.repository.UserRepository;
 import java.util.Map;
 import java.util.HashMap;
+import org.example.dto.JobRequest;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.example.dto.JobApplicationDTO;
 import java.util.stream.Collectors;
-
+import org.example.dto.UpdateJobStatusRequest;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class JobApplicationService {
         return jobApplicationRepository.findById(id).orElse(null);
     }
 
-    public JobApplication createJob(JobApplication job) {
+    public JobApplication createJob(JobRequest request) {
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
@@ -55,12 +56,35 @@ public class JobApplicationService {
 
         User user = userRepository.findByEmail(email);
 
+        JobApplication job = new JobApplication();
+
+        job.setCompanyName(request.getCompanyName());
+        job.setJobRole(request.getJobRole());
+        job.setStatus(request.getStatus());
+        job.setAppliedDate(request.getAppliedDate());
+        job.setNotes(request.getNotes());
+
         job.setUser(user);
 
         return jobApplicationRepository.save(job);
     }
     public void deleteJob(Long id) {
         jobApplicationRepository.deleteById(id);
+    }
+
+    public JobApplication updateStatus(Long id,
+                                       UpdateJobStatusRequest request) {
+
+        JobApplication job =
+                jobApplicationRepository.findById(id).orElse(null);
+
+        if (job == null) {
+            return null;
+        }
+
+        job.setStatus(request.getStatus());
+
+        return jobApplicationRepository.save(job);
     }
 
     public List<JobApplicationDTO> getAllJobsDTO() {

@@ -1,5 +1,5 @@
 package org.example.controller;
-
+import org.example.dto.JobRequest;
 import org.example.entity.JobApplication;
 import org.example.repository.JobApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.data.domain.Sort;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.example.dto.JobApplicationDTO;
-
+import org.example.dto.UpdateJobStatusRequest;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,8 +30,8 @@ public class JobApplicationController {
     private JobApplicationRepository jobApplicationRepository;
 
     @PostMapping
-    public JobApplication createJob(@Valid @RequestBody JobApplication job) {
-        return jobApplicationService.createJob(job);
+    public JobApplication createJob(@Valid @RequestBody JobRequest request) {
+        return jobApplicationService.createJob(request);
     }
 
     @GetMapping
@@ -46,17 +46,9 @@ public class JobApplicationController {
     @PutMapping("/{id}/status")
     public JobApplication updateStatus(
             @PathVariable Long id,
-            @RequestParam String status) {
+            @RequestBody UpdateJobStatusRequest request) {
 
-        JobApplication job =
-                jobApplicationRepository.findById(id).orElse(null);
-
-        if (job != null) {
-            job.setStatus(status);
-            return jobApplicationRepository.save(job);
-        }
-
-        return null;
+        return jobApplicationService.updateStatus(id, request);
     }
     @GetMapping("/dashboard")
     public Map<String, Long> getDashboardStats() {
@@ -107,8 +99,9 @@ public class JobApplicationController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public JobApplication updateJob(@PathVariable Long id,
-                                    @RequestBody JobApplication updatedJob) {
+    public JobApplication updateJob(
+            @PathVariable Long id,
+            @RequestBody JobRequest request) {
 
         JobApplication existingJob =
                 jobApplicationRepository.findById(id).orElse(null);
@@ -117,11 +110,11 @@ public class JobApplicationController {
             return null;
         }
 
-        existingJob.setCompanyName(updatedJob.getCompanyName());
-        existingJob.setJobRole(updatedJob.getJobRole());
-        existingJob.setStatus(updatedJob.getStatus());
-        existingJob.setAppliedDate(updatedJob.getAppliedDate());
-        existingJob.setNotes(updatedJob.getNotes());
+        existingJob.setCompanyName(request.getCompanyName());
+        existingJob.setJobRole(request.getJobRole());
+        existingJob.setStatus(request.getStatus());
+        existingJob.setAppliedDate(request.getAppliedDate());
+        existingJob.setNotes(request.getNotes());
 
         return jobApplicationRepository.save(existingJob);
     }

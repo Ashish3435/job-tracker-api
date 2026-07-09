@@ -31,7 +31,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
+        System.out.println("Request Path: " + request.getServletPath());
         System.out.println("Authorization Header: " + authHeader);
+        System.out.println("Should Not Filter: " + shouldNotFilter(request));
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -65,6 +67,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext()
                     .setAuthentication(authToken);
+            System.out.println("Authentication stored: "
+                    + SecurityContextHolder.getContext().getAuthentication());
         }
         else {
             System.out.println("========== JWT DEBUG ==========");
@@ -77,8 +81,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
+
         String path = request.getServletPath();
-        return path.startsWith("/api/auth/")
+
+        return path.equals("/api/auth/login")
+                || path.equals("/api/auth/register")
                 || path.startsWith("/swagger-ui/")
                 || path.startsWith("/v3/api-docs/");
     }
