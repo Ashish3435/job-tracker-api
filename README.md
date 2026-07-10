@@ -241,7 +241,7 @@ Bearer YOUR_JWT_TOKEN
 
 ## 📖 Local Swagger UI
 
-![Local Swagger](images/postman.png)
+![Local Swagger](images/swagger_local.png)
 
 ---
 
@@ -253,13 +253,13 @@ Bearer YOUR_JWT_TOKEN
 
 ## 🌍 Production Swagger UI
 
-![Production Swagger](images/swagger_local.png)
+![Production Swagger](images/swagger_production.png)
 
 ---
 
 ## 🧪 Postman API Testing
 
-![Postman](images/swagger_production.png)
+![Postman](images/postman.png)
 
 ---
 
