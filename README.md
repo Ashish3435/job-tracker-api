@@ -1,10 +1,10 @@
 # 🚀 Job Tracker API
 
-A production-ready **RESTful API** built with **Spring Boot** for managing job applications securely. The application uses **JWT Authentication**, **Role-Based Authorization**, **MySQL**, **Docker**, and is deployed on **Railway**. API documentation is provided using **Swagger/OpenAPI**.
+A production-ready **RESTful API** built with **Spring Boot** for managing job applications securely. The application uses **JWT Authentication**, **Role-Based Authorization**, **MySQL**, **Docker**, and is deployed on **Railway**. API documentation is available through **Swagger/OpenAPI**.
 
 ---
 
-## 📑 Table of Contents
+# 📑 Table of Contents
 
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
@@ -14,13 +14,15 @@ A production-ready **RESTful API** built with **Spring Boot** for managing job a
 - [API Documentation](#-api-documentation)
 - [Authentication](#-authentication)
 - [Main API Endpoints](#-main-api-endpoints)
+- [Security](#-security)
+- [Project Screenshots](#-project-screenshots)
 - [Future Enhancements](#-future-enhancements)
 - [Author](#-author)
 - [License](#-license)
 
 ---
 
-## ✨ Features
+# ✨ Features
 
 - 🔐 JWT Authentication
 - 👥 Role-Based Authorization (USER / ADMIN)
@@ -38,7 +40,7 @@ A production-ready **RESTful API** built with **Spring Boot** for managing job a
 
 ---
 
-## 🛠 Tech Stack
+# 🛠 Tech Stack
 
 | Technology | Purpose |
 |------------|---------|
@@ -56,7 +58,7 @@ A production-ready **RESTful API** built with **Spring Boot** for managing job a
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
 ```text
 src
@@ -64,10 +66,10 @@ src
 ├── controller
 ├── dto
 ├── entity
+├── exception
 ├── repository
 ├── security
-├── service
-└── exception
+└── service
 ```
 
 ---
@@ -91,11 +93,12 @@ cd job-tracker-api
 Update the following properties in `application.properties`:
 
 ```properties
-spring.datasource.url
-spring.datasource.username
-spring.datasource.password
-jwt.secret
-jwt.expiration
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+
+jwt.secret=
+jwt.expiration=
 ```
 
 ## Run the Application
@@ -104,7 +107,7 @@ jwt.expiration
 ./mvnw spring-boot:run
 ```
 
-The application will start at:
+The application starts on:
 
 ```
 http://localhost:8082
@@ -138,25 +141,25 @@ http://localhost:8081/swagger-ui/index.html
 
 # 📖 API Documentation
 
-### Local
+## Local
 
 ```
 http://localhost:8082/swagger-ui/index.html
 ```
 
-### Docker
+## Docker
 
 ```
 http://localhost:8081/swagger-ui/index.html
 ```
 
-### Railway (Live API)
+## Railway (Live API)
 
 ```
 https://outstanding-nature-production-a1f3.up.railway.app
 ```
 
-### Railway Swagger
+## Railway Swagger
 
 ```
 https://outstanding-nature-production-a1f3.up.railway.app/swagger-ui/index.html
@@ -222,6 +225,44 @@ Bearer YOUR_JWT_TOKEN
 
 ---
 
+# 📸 Project Screenshots
+
+## 🐳 Docker Containers
+
+![Docker Containers](images/docker.png)
+
+---
+
+## 🐳 Docker Compose Running
+
+![Docker Compose](images/docker_compose.png)
+
+---
+
+## 📖 Local Swagger UI
+
+![Local Swagger](images/postman.png)
+
+---
+
+## ☁️ Railway Deployment
+
+![Railway](images/railway.png)
+
+---
+
+## 🌍 Production Swagger UI
+
+![Production Swagger](images/swagger_local.png)
+
+---
+
+## 🧪 Postman API Testing
+
+![Postman](images/swagger_production.png)
+
+---
+
 # 🚀 Future Enhancements
 
 - 📄 Resume Upload
@@ -232,17 +273,6 @@ Bearer YOUR_JWT_TOKEN
 - 🔄 CI/CD with GitHub Actions
 - 🌐 React Frontend
 - 📱 Mobile App Integration
-
----
-
-# 📸 Screenshots
-
-> Screenshots will be added soon.
-
-- Swagger UI
-- Docker Containers
-- Railway Deployment
-- Postman API Testing
 
 ---
 
