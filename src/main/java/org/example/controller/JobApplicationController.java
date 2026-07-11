@@ -58,16 +58,16 @@ public class JobApplicationController {
         stats.put("totalApplications", jobApplicationRepository.count());
 
         stats.put("applied",
-                jobApplicationRepository.countByStatus("Applied"));
+                jobApplicationRepository.countByStatus("applied"));
 
         stats.put("interview",
-                jobApplicationRepository.countByStatus("Interview"));
+                jobApplicationRepository.countByStatus("interview"));
 
         stats.put("offer",
-                jobApplicationRepository.countByStatus("Offer"));
+                jobApplicationRepository.countByStatus("offer"));
 
         stats.put("rejected",
-                jobApplicationRepository.countByStatus("Rejected"));
+                jobApplicationRepository.countByStatus("rejected"));
 
         return stats;
     }

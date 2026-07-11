@@ -1,22 +1,21 @@
 package org.example.service;
 
-import org.example.entity.JobApplication;
-import org.example.repository.JobApplicationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.example.entity.User;
-import org.example.repository.UserRepository;
-import java.util.Map;
-import java.util.HashMap;
+import org.example.dto.JobApplicationDTO;
 import org.example.dto.JobRequest;
-
+import org.example.dto.UpdateJobStatusRequest;
+import org.example.entity.JobApplication;
+import org.example.entity.User;
+import org.example.repository.JobApplicationRepository;
+import org.example.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.example.dto.JobApplicationDTO;
-import java.util.stream.Collectors;
-import org.example.dto.UpdateJobStatusRequest;
+import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class JobApplicationService {
@@ -60,14 +59,17 @@ public class JobApplicationService {
 
         job.setCompanyName(request.getCompanyName());
         job.setJobRole(request.getJobRole());
-        job.setStatus(request.getStatus());
+
+        // Store status in lowercase
+        job.setStatus(request.getStatus().trim().toLowerCase());
+
         job.setAppliedDate(request.getAppliedDate());
         job.setNotes(request.getNotes());
-
         job.setUser(user);
 
         return jobApplicationRepository.save(job);
     }
+
     public void deleteJob(Long id) {
         jobApplicationRepository.deleteById(id);
     }
@@ -82,7 +84,8 @@ public class JobApplicationService {
             return null;
         }
 
-        job.setStatus(request.getStatus());
+        // Store status in lowercase
+        job.setStatus(request.getStatus().trim().toLowerCase());
 
         return jobApplicationRepository.save(job);
     }
@@ -114,6 +117,7 @@ public class JobApplicationService {
                 job.getStatus()
         );
     }
+
     public List<JobApplication> getMyJobs() {
 
         Authentication authentication =
@@ -125,6 +129,7 @@ public class JobApplicationService {
 
         return jobApplicationRepository.findByUser(user);
     }
+
     public Map<String, Long> getMyDashboardStats() {
 
         Authentication authentication =
@@ -136,17 +141,17 @@ public class JobApplicationService {
 
         Map<String, Long> stats = new HashMap<>();
 
-        stats.put("Applied",
-                jobApplicationRepository.countByUserAndStatus(user, "Applied"));
+        stats.put("applied",
+                jobApplicationRepository.countByUserAndStatus(user, "applied"));
 
-        stats.put("Interview",
-                jobApplicationRepository.countByUserAndStatus(user, "Interview"));
+        stats.put("interview",
+                jobApplicationRepository.countByUserAndStatus(user, "interview"));
 
-        stats.put("Offer",
-                jobApplicationRepository.countByUserAndStatus(user, "Offer"));
+        stats.put("offer",
+                jobApplicationRepository.countByUserAndStatus(user, "offer"));
 
-        stats.put("Rejected",
-                jobApplicationRepository.countByUserAndStatus(user, "Rejected"));
+        stats.put("rejected",
+                jobApplicationRepository.countByUserAndStatus(user, "rejected"));
 
         return stats;
     }
