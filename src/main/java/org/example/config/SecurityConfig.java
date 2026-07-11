@@ -33,6 +33,11 @@ public class SecurityConfig {
 
                         .requestMatchers(
                                 "/",
+                                "/index.html",
+                                "/css/**",
+                                "/js/**",
+                                "/images/**",
+                                "/favicon.ico",
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/swagger-ui/**",
